@@ -1,0 +1,32 @@
+#!/bin/bash
+# this is a simple timer to calculate time passed since you executed this script 
+sec=0
+min=0
+hour=0
+
+if (( $# > 1 ));then
+  echo "Usage: ./`basename $0` [title_for_the_timer] "
+  echo "If title contains spaces use double quotes \"title\""
+  exit 0
+fi
+
+if [[  -n "$1" ]];then
+  echo "*********** Timer For: $1 *****************"
+fi
+
+if (( $# == 0 ));then
+  echo "*Note: You can provide a title for your timer by running : ./timer [title]"
+fi
+
+while true;do
+  printf "time passed is $hour hour/s, $min minute/s and $sec second/s ..\r" # \r will overwrite the previous line, making only one line appears
+  sec=$[ $sec + 1 ]
+  if (( $sec == 60 ));then
+    min=$[ $min +1 ]
+  fi
+  if (( $min == 60 ));then
+    hour=$[ $hour + 1 ]
+  fi
+  sleep 1
+done
+
