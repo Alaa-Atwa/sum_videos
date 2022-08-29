@@ -69,6 +69,6 @@ M=$(( m+mis))
 hours=$((M/60))
 mins=$(( M-hours*60))
 
-echo -e " \n ${GREEN}total time is ${RED}$hours hours , ${BLUE}$mins minutes and ${YELLOW}$ts seconds \n "
+echo -e " \n ${GREEN}total time is ${RED}$hours hours , ${BLUE}$mins minutes and ${YELLOW}$ts seconds \n " | tee total_course_time.txt
 
 rm -rf /tmp/mins.txt /tmp/allminutes.txt /tmp/seconds.txt /tmp/allseconds.txt /tmp/videos.txt  
