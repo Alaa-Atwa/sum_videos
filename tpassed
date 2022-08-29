@@ -1,6 +1,8 @@
 #!/bin/bash
 # Scripted By: Alaa-Atwa
 # this is a simple timer to calculate time passed since you executed this script 
+# Update: Sessions now will be recorded with dates to easily identify them. 
+# all your sessions will be at "~/sessions" directory
 
 # Colors
 # to access variables echo ${RED}Colored_red_here
@@ -18,9 +20,6 @@ BLUE="${C}[1;34m"
 sec=0
 min=0
 hour=0
-
-# preventing accdintly Quiting the timer by typing ctrl + c
-trap echo "You Can't interrupt this script, only exit it " SIGINT 
 
 if (( $# > 1 ));then
   echo "Usage: ./`basename $0` [title_for_the_timer] "
@@ -47,8 +46,14 @@ if (( $# == 0 ));then
   echo "*Note: You can provide a title for your timer by running : ./timer [title]"
 fi
 
+# recording session location and edits
+name=`date | awk ' { print $2,$3,$5,$6 }' | sed -e 's/ /./g'`
+if [[ -d "~/sessions" ]];then
+  mkdir ~/sessions
+fi
+
 while true;do
-  printf "Time Passed is ${RED}$hour hour/s, ${BLUE}$min minute/s and ${GREEN}$sec second/s ..\r" # \r will overwrite the previous line, making only one line appears
+  printf "Time Passed is ${RED}$hour hour/s, ${BLUE}$min minute/s and ${GREEN}$sec second/s ..\r" | tee  ~/sessions/$name.session.txt
   sec=$[ $sec + 1 ]
   if (( $sec == 60 ));then
     min=$[ $min +1 ]
