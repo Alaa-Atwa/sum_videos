@@ -19,6 +19,9 @@ sec=0
 min=0
 hour=0
 
+# preventing accdintly Quiting the timer by typing ctrl + c
+trap echo "You Can't interrupt this script, only exit it " SIGINT 
+
 if (( $# > 1 ));then
   echo "Usage: ./`basename $0` [title_for_the_timer] "
   echo "If title contains spaces use double quotes \"title\""
