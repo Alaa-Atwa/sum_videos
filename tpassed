@@ -44,16 +44,24 @@ fi
 
 if (( $# == 0 ));then
   echo "*Note: You can provide a title for your timer by running : ./timer [title]"
+  echo 
 fi
 
-# recording session location and edits
-name=`date | awk ' { print $2,$3,$5,$6 }' | sed -e 's/ /./g'`
-if [[ -d "~/sessions" ]];then
-  mkdir ~/sessions
+#adding recording session location 
+session_name=`date | awk ' { print $2,$3,$5,$6 }' | sed -e 's/ /./g'`
+session_dir=`date | awk ' { print $2,$3 }' | sed -e 's/ /./g'`
+
+if [[ ! -d "~/sessions" ]];then
+  mkdir ~/sessions 2> /dev/null
 fi
+
+if [[ ! -d "~/sessions/$session_dir" ]];then
+  mkdir  ~/sessions/$session_dir 2> /dev/null
+fi
+
 
 while true;do
-  printf "Time Passed is ${RED}$hour hour/s, ${BLUE}$min minute/s and ${GREEN}$sec second/s ..\r" | tee  ~/sessions/$name.session.txt
+  printf "Time Passed is ${RED}$hour hour/s, ${BLUE}$min minute/s and ${GREEN}$sec second/s ..\r" | tee  ~/sessions/$session_dir/$session_name.session.txt
   sec=$[ $sec + 1 ]
   if (( $sec == 60 ));then
     min=$[ $min +1 ]
