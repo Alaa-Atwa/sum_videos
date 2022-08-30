@@ -5,8 +5,9 @@
 # all your sessions will be at "~/sessions" directory
 
 # Colors
-# to access variables echo ${RED}Colored_red_here
+# to access colors as variables echo ${RED}Colored_red_here
 C=$(printf '\033') # you must use this line before using any color
+
 RED="${C}[1;31m"
 SED_RED="${C}[1;31m&${C}[0m"
 GREEN="${C}[1;32m"
