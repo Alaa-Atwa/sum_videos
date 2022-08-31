@@ -5,9 +5,8 @@
 # all your sessions will be at "~/sessions" directory
 
 # Colors
-# to access colors as variables echo ${RED}Colored_red_here
+# to access variables echo ${RED}Colored_red_here
 C=$(printf '\033') # you must use this line before using any color
-
 RED="${C}[1;31m"
 SED_RED="${C}[1;31m&${C}[0m"
 GREEN="${C}[1;32m"
@@ -17,6 +16,7 @@ SED_YELLOW="${C}[1;33m&${C}[0m"
 BOLD='\033[1m'
 SED_RED_YELLOW="${C}[1;31;103m&${C}[0m"
 BLUE="${C}[1;34m"
+_line="----------------------------------------------------------------------------"
 #--------------------------------------------------------------------# 
 sec=0
 min=0
@@ -33,36 +33,40 @@ if [[  -n "$1" ]];then
   # checking if "figlet" is not installed it will skip using this command 
   if [[ $(command -v figlet) ]];then
     clear # comment this line if you don't want to clear the screen
-    figlet -f banner -w 60 $title
-   echo "Scripted by: Alaa-Atwa "
-   echo 
+    figlet -f banner -w 100 $title
+   echo -e "Scripted by: ${YELLOW}Alaa-Atwa \n"
  else
    clear # comment this line if you don't want to clear the screen 
-   echo "============== Timer For: $title ==========================="
-   echo
+   echo -e "============== Timer For: $title ===========================\n"
   fi
 fi
 
 if (( $# == 0 ));then
-  echo "*Note: You can provide a title for your timer by running : ./timer [title]"
-  echo 
+  echo -e "*Note: You can provide a title for your timer by running : ./timer [title]\n"
 fi
 
 #adding recording session location 
 session_name=`date | awk ' { print $2,$3,$5,$6 }' | sed -e 's/ /./g'`
 session_dir=`date | awk ' { print $2,$3 }' | sed -e 's/ /./g'`
+session_month=`date | awk '{ print $3 }'`
 
-if [[ ! -d "~/sessions" ]];then
+if [[ ! -e "~/sessions" ]];then
   mkdir ~/sessions 2> /dev/null
 fi
 
-if [[ ! -d "~/sessions/$session_dir" ]];then
-  mkdir  ~/sessions/$session_dir 2> /dev/null
+if [[ ! -e "~sessions/$session_month" ]];then
+  mkdir ~/sessions/$session_month 2> /dev/null
 fi
 
+if [[ ! -e "~/sessions/$session_month/$session_dir" ]];then
+  mkdir  ~/sessions/$session_month/$session_dir 2> /dev/null
+fi
+
+echo -e "Note: ${GREEN}every session is saved under \"$HOME/sessions\" directory \n"
+echo -e "$_line\n"
 
 while true;do
-  printf "Time Passed is ${RED}$hour hour/s, ${BLUE}$min minute/s and ${GREEN}$sec second/s ..\r" | tee  ~/sessions/$session_dir/$session_name.session.txt
+  printf "Time Passed is ${RED}$hour hour/s, ${BLUE}$min minute/s and ${GREEN}$sec second/s ..\r" | tee  ~/sessions/$session_month/$session_dir/$session_name.session.txt
   sec=$[ $sec + 1 ]
   if (( $sec == 60 ));then
     min=$[ $min +1 ]
