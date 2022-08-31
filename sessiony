@@ -1,8 +1,7 @@
 #!/bin/bash
 # Scripted By: Alaa-Atwa
-# this is a simple timer to calculate time passed since you executed this script 
+# this is a simple timer to record sessions of toatal time spent when you do something, like studying
 # Update: Sessions now will be recorded with dates to easily identify them. 
-# all your sessions will be at "~/sessions" directory
 
 # Colors
 # to access variables echo ${RED}Colored_red_here
@@ -17,7 +16,7 @@ BOLD='\033[1m'
 SED_RED_YELLOW="${C}[1;31;103m&${C}[0m"
 BLUE="${C}[1;34m"
 _line="----------------------------------------------------------------------------"
-#--------------------------------------------------------------------# 
+
 sec=0
 min=0
 hour=0
