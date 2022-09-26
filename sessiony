@@ -1,6 +1,6 @@
 #!/bin/bash
 # Scripted By: Alaa-Atwa
-# this is a simple timer to calculate time passed since you executed this script 
+# this script calculate time passed since you executed this script 
 # Update: Sessions now will be recorded with dates to easily identify them. 
 # all your sessions will be saved at "~/sessions" directory
 
@@ -17,6 +17,10 @@ BOLD='\033[1m'
 SED_RED_YELLOW="${C}[1;31;103m&${C}[0m"
 BLUE="${C}[1;34m"
 
+function draw_line(){
+  printf "%$(tput cols)s" | tr " " "-"
+}
+
 sec=0
 min=0
 hour=0
@@ -29,9 +33,9 @@ if (( $# > 1 ));then
 fi
 
 figlet "SessionY"
-# echo -e "Scripted by: ${BLUE}Alaa-Atwa"
+# echo -e "by: ${BLUE}Alaa Atwa"
 
-printf "%$(tput cols)s\n" | tr " " "=" # drawing a line break 
+printf "%$(tput cols)s\n" | tr " " "=" # drawing a break line 
 
 if [[  -n "$1" ]];then
   title="$1"
@@ -51,8 +55,8 @@ fi
 #fi
 
 #adding session saving location 
-session_name=`date | awk ' { print $2,$3,$5,$6 }' | sed -e 's/ /./g'`
-session_day=`date | awk ' { print $2,$3 }' | sed -e 's/ /./g'`
+session_name=`date | awk ' { print $2,$3,$5,$6 }' | tr " " "."`
+session_day=`date | awk ' { print $2,$3 }' | tr " " "."`
 session_month=`date | awk '{ print $3 }'`
 
 if [[ ! -e "~/sessions" ]];then
@@ -70,6 +74,19 @@ fi
 saving_file=~/sessions/$session_month/$session_day/$session_name.session
 
 echo -e "* ${GREEN}every session is saved under \"$HOME/sessions\" \n"
+
+# Displaying Previous sessions of current day:
+echo "Previous Sessions on this day: "
+month=`date | awk '{print $3}'`
+day=`date | awk '{ print $2,$3}' | tr " " "."`
+
+files=$HOME/sessions/$month/$day/*
+for i in $files;do
+  cat $i
+  echo 
+done
+draw_line
+echo 
 
 while true;do
   printf "Session Time is:  ${RED}$hour hour/s, ${BLUE}$min minute/s and ${GREEN}$sec second/s ..\r" | tee  $saving_file 
