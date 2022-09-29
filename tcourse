@@ -10,7 +10,7 @@
 
 # Colors
 # to access colors as variables: echo ${RED}Colored_red_here
-C=$(printf '\033') # you must use this line before using any color
+C=$(printf '\033') 
 RED="${C}[1;31m"
 SED_RED="${C}[1;31m&${C}[0m"
 GREEN="${C}[1;32m"
@@ -20,10 +20,25 @@ SED_YELLOW="${C}[1;33m&${C}[0m"
 SED_RED_YELLOW="${C}[1;31;103m&${C}[0m"
 BLUE="${C}[1;34m"
 
+function breakLine(){
+   printf "${GREEN}%$(tput cols)s" | tr " " "=" 
+}
+
+# creating a spinner
+function spinner(){
+  while [ 1 ];do
+    spin=( '\' '|' '/' '-' ) 
+    for i in ${spin[@]};do
+     echo -ne "$i \r"
+     sleep 0.2
+    done
+  done
+}
+
 # Banner
 if [[ `command -v figlet` ]];then
-  figlet "Tcourse"
-  echo "scripted by: ${BLUE} Alaa-Atwa"
+  figlet -c "Tcourse"
+  echo -e "\t \t \t scripted by: ${BLUE} Alaa-Atwa"
 fi
 
 # check for the required tools
@@ -36,9 +51,10 @@ for cmd in ${required_tools[@]};do
   fi
 done
 
-echo "${GREEN}===================================================================="
-echo "${BLUE}     Calculating, Please Wait ,it may takes a while !"
-echo "${GREEN}=====================================================================" 
+breakLine && echo -e "\t \t \t ${BLUE}Calculating, Please Wait ,it may takes a while !"  
+spinner & # running the spinner
+pid=$!
+breakLine
 
 # getting videos
 format=(mp4 mkv mov avi flv wmv webm mpeg-4) # add the video format if not listed
@@ -69,6 +85,8 @@ M=$(( m+mis))
 hours=$((M/60))
 mins=$(( M-hours*60))
 
-echo -e " \n ${GREEN}total time is ${RED}$hours hours , ${BLUE}$mins minutes and ${YELLOW}$ts seconds \n " | tee total_course_time.txt
+echo -e " \n ${GREEN}total course time is ${RED}$hours hours , ${BLUE}$mins minutes and ${YELLOW}$ts seconds \n "
+
+kill $pid  # end the spinner 
 
 rm -rf /tmp/mins.txt /tmp/allminutes.txt /tmp/seconds.txt /tmp/allseconds.txt /tmp/videos.txt  
