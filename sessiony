@@ -1,12 +1,14 @@
 #!/bin/bash
 # Scripted By: Alaa-Atwa
-# this script calculate time passed since you executed this script 
-# Update: Sessions now will be recorded with dates to easily identify them. 
-# all your sessions will be saved at "~/sessions" directory
+# this script calculate time passed since you executed this script ( and start doing something like studying )
+# updates:
+#  1. Sessions now will be recorded with dates to easily identify them. 
+#  2. previous sessions of the same day now will be displayed  
+# all your sessions will be saved under "~/sessions" directory
 
 # Colors
 # to access color as variable --> echo ${RED}Colored_red_here
-C=$(printf '\033') # you must use this line before using any color
+C=$(printf '\033') 
 RED="${C}[1;31m"
 SED_RED="${C}[1;31m&${C}[0m"
 GREEN="${C}[1;32m"
@@ -32,7 +34,7 @@ if (( $# > 1 ));then
   exit 0
 fi
 
-figlet "SessionY"
+figlet -c "SessionY"
 # echo -e "by: ${BLUE}Alaa Atwa"
 
 printf "%$(tput cols)s\n" | tr " " "=" # drawing a break line 
@@ -81,10 +83,17 @@ month=`date | awk '{print $3}'`
 day=`date | awk '{ print $2,$3}' | tr " " "."`
 
 files=$HOME/sessions/$month/$day/*
+
 for i in $files;do
-  cat $i
-  echo 
+  if [ ! -e $i ];then
+    echo "No Previous Sessions till Now "
+    break
+  else
+    cat $i
+    echo
+  fi
 done
+
 draw_line
 echo 
 
