@@ -64,8 +64,8 @@ for ext in ${format[@]};do
 done
 
 cat /tmp/videos.txt | while read line; do
-  exiftool "$line" | grep "Media Duration" | cut -d":" -f"3" >> /tmp/mins.txt
-  exiftool "$line" | grep "Media Duration" | cut -d":" -f"4" >> /tmp/seconds.txt 
+  exiftool "$line" | grep "Duration" | cut -d":" -f"3" >> /tmp/mins.txt
+  exiftool "$line" | grep "Duration" | cut -d":" -f"4" >> /tmp/seconds.txt 
 done
 
 
