@@ -47,7 +47,6 @@ required_tools=(exiftool vim awk)
 for cmd in ${required_tools[@]};do
   if [[ ! $(command -v $cmd) ]]; then
     echo "You Must install $cmd first"
-    apt install -y $cmd 
     exit 1
   fi
 done
