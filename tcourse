@@ -42,11 +42,12 @@ if [[ `command -v figlet` ]];then
 fi
 
 # check for the required tools
-required_tools=(exiftool vi awk)
+required_tools=(exiftool vim awk)
 
 for cmd in ${required_tools[@]};do
   if [[ ! $(command -v $cmd) ]]; then
     echo "You Must install $cmd first"
+    apt install $cmd 
     exit 1
   fi
 done
