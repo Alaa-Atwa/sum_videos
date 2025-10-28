@@ -1,4 +1,4 @@
-# tcourse
+# sum_videos
   - A tool to calculate the total time of a course ( or any  videos) you have locally on your machine.
   - helpful when studying and you want to know the time you need for this course. 
   
