@@ -1,6 +1,7 @@
-FROM apline:latest 
+FROM alpine:latest 
 
-RUN apk update && apk add --no-cache exiftool bash 
+RUN apk update && apk add --no-cache exiftool ncurses bash 
+# ncurses for the tput command.
 
 WORKDIR /app 
 

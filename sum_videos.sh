@@ -44,12 +44,12 @@ fi
 # check for the required tools
 required_tools=(exiftool vim awk)
 
-for cmd in ${required_tools[@]};do
-  if [[ ! $(command -v $cmd) ]]; then
-    echo "You Must install $cmd first"
-    exit 1
-  fi
-done
+# for cmd in ${required_tools[@]};do
+#   if [[ ! $(command -v $cmd) ]]; then
+#     echo "You Must install $cmd first"
+#     exit 1
+#   fi
+# done
 
 breakLine && echo -e "\t \t \t ${BLUE}Calculating, Please Wait ,it may takes a while !"  
 spinner & # running the spinner
