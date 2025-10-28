@@ -1,13 +1,106 @@
-# sum_videos
-  - A tool to calculate the total time of a course ( or any  videos) you have locally on your machine.
-  - helpful when studying and you want to know the time you need for this course. 
-  
-## Usage:
-1. navigate to your course 's root directory.
-2. copy the script to that direcotry, or add the script to  one of your "PATH" directories. 
-3. run ./tcourse inside the directory of your course and it will look for every video you have recursively,
-   if you added the script to $PATH then you can simply run "tcourse" inside any directory.
+# 🎬 Video Duration Summator
 
+Need to know how long that entire course folder really is? Want to estimate your weekend binge time? This tiny but mighty Bash script scans a directory full of videos and calculates the **total viewing duration** with precision.
 
-## todo
-1. ...
+Powered by `exiftool`, it supports multiple video formats and handles nested folders too.
+
+---
+
+## ✨ Features
+
+✅ Calculates the **total duration** of all videos  
+✅ Works **recursively** through subfolders  
+✅ Supports common video formats (MP4, MKV, AVI, MOV, and more)  
+✅ Clean and friendly output (HH:MM:SS)  
+✅ Linux-friendly and portable (Docker support included!)  
+
+---
+
+## 🚀 Usage
+
+### Prerequisites
+
+Install `exiftool` if you don’t already have it:
+```bash
+sudo apt install exiftool
+````
+
+or
+
+```bash
+sudo apk add exiftool
+```
+
+### Run the script
+
+```bash
+./sum_videos.sh /path/to/videos
+```
+
+If no directory is provided, it defaults to the current folder:
+
+```bash
+./sum_videos.sh
+```
+
+---
+
+## 🐳 Run with Docker (optional)
+
+No dependencies? No problem.
+
+### Build the image
+
+```bash
+docker build -t video-duration-sum .
+```
+
+### Run against your current directory of videos
+
+```bash
+docker run --rm -v "$(pwd)":/data video-duration-sum
+```
+
+---
+
+## 🔧 Supported Video Formats
+
+* `.mp4`
+* `.mkv`
+* `.avi`
+* `.mov`
+* `.webm`
+* `.m4v`
+* `.flv`
+
+You can easily extend the list inside the script.
+
+---
+
+## 📝 Example Output
+
+```
+Total: 12 hours, 43 minutes, 19 seconds
+```
+
+That’s how long your course binge will be. Choose snacks wisely.
+
+---
+
+## 🧠 How It Works
+
+The script uses:
+
+* `exiftool` to extract each video’s duration in numeric seconds
+* `awk` to sum and convert to readable time
+
+No complex parsing. No broken math. Just accurate results.
+
+---
+
+## ❤️ Contributions
+
+Suggestions, improvements, and PRs are always welcome.
+
+---
+
