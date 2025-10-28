@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash 
 
 # scripted by: Alaa-Atwa
-# this script calculate "total time of a course you have locally on your machine"
-# Navigate to your course folder and run this script 
+# this script calculate "total time of a group of videos for the current directory and subdirectories"
+# Navigate to your vidoes location and run this script 
 
 # You can add the script to your $PATH :
 # > cp tcourse /usr/bin/
@@ -37,7 +37,7 @@ function spinner(){
 
 # Banner
 if [[ `command -v figlet` ]];then
-  figlet -c "Tcourse"
+  figlet "Tcourse"
   echo -e "\t \t \t scripted by: ${BLUE} Alaa-Atwa"
 fi
 
@@ -56,37 +56,40 @@ spinner & # running the spinner
 pid=$!
 breakLine
 
-# getting videos
-format=(mp4 mkv mov avi flv wmv webm mpeg-4) # add the video format if not listed
+# List extensions you want to include:
+exts=(mp4 mkv avi mov webm m4v flv)
 
-for ext in ${format[@]};do
-    find . -type f  -iname "*.$ext" >> /tmp/videos.txt
+# Build -ext arguments for exiftool
+ext_args=()
+for e in "${exts[@]}"; do
+  ext_args+=( -ext "$e" )
 done
 
-cat /tmp/videos.txt | while read line; do
-  exiftool "$line" | grep "Duration" | cut -d":" -f"3" >> /tmp/mins.txt
-  exiftool "$line" | grep "Duration" | cut -d":" -f"4" >> /tmp/seconds.txt 
-done
+# Ask exiftool for numeric Duration values only (-n numeric, -s3 tag value only),
+# recursively from current directory.
+# If you prefer non-recursive, remove -r.
+total_seconds=$(exiftool -r "${ext_args[@]}" -Duration -n -s3 . 2>/dev/null \
+                | awk '{sum+=$1} END{printf "%.3f\n", sum+0}')
 
+# If there were no videos, do this:
+if [[ -z "$total_seconds" || "$total_seconds" == "0.000" ]]; then
+  echo "No video durations found."
+  exit 0
+fi
 
-awk '{ sum += $1} END { print sum }' /tmp/mins.txt > /tmp/allminutes.txt
-awk '{ sum += $1} END { print sum }' /tmp/seconds.txt > /tmp/allseconds.txt
-
-# converting seconds into minutes
-s=$(cat /tmp/allseconds.txt)
-mis=$((s/60))
-ts=$(( s-mis*60 ))
-# exiftool extract the real duration in seconds .. so it may differ in calculating the total seconds
-
-#converting minutes into hours 
-m=$(cat /tmp/allminutes.txt)
-M=$(( m+mis))
-
-hours=$((M/60))
-mins=$(( M-hours*60))
-
-echo -e " \n ${GREEN}total course time is ${RED}$hours hours , ${BLUE}$mins minutes and ${YELLOW}$ts seconds \n "
+# Convert to hours/minutes/seconds. Use awk for floating math and pretty print.
+awk -v sec="$total_seconds" 'BEGIN{
+  total=sec;
+  h=int(total/3600);
+  m=int((total%3600)/60);
+  s=total - h*3600 - m*60;
+  # Trim trailing zeros on fractional seconds, print seconds as integer if close to integer
+  if (s == int(s)) {
+    printf("Total: %d hours, %d minutes, %d seconds\n", h, m, int(s));
+  } else {
+    # print seconds with up to 3 decimals (ms)
+    printf("Total: %d hours, %d minutes, %06.3f seconds\n", h, m, s);
+  }
+}'
 
 kill $pid  # end the spinner 
-
-rm -rf /tmp/mins.txt /tmp/allminutes.txt /tmp/seconds.txt /tmp/allseconds.txt /tmp/videos.txt  
